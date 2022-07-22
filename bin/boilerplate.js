@@ -1,74 +1,37 @@
-module.exports.createFuncJsx = name => [
-  `import React from "react";`,
-  `import styles from "./${name}.module.scss";`,
+const convertPascalToKebabCase = (str) => {
+  return str
+    .split(/\.?(?=[A-Z])/)
+    .join("-")
+    .toLowerCase();
+};
+
+module.exports.createFuncJsx = (name) => [
+  `import "./${name}.scss";`,
   "",
   `const ${name} = () => {`,
   `  return (`,
-  `    <>`,
+  `    <div className="${convertPascalToKebabCase(name)}">`,
   `      <p>${name} works</p>`,
-  `    </>`,
+  `    </div>`,
   `  );`,
   `};`,
   "",
   `export default ${name};`,
 ];
 
-module.exports.createClassJsx = name => [
-  `import React, { Component } from "react";`,
-  `import styles from "./${name}.module.scss";`,
-  "",
-  `class ${name} extends Component {`,
-  `  render() {`,
-  `    return (`,
-  `      <>`,
-  `        <p>${name} works</p>`,
-  `      </>`,
-  `    );`,
-  `  }`,
-  `}`,
-  "",
-  `export default ${name};`,
-];
-
-module.exports.createTestJs = name => [
-  `import React from "react";`,
+module.exports.createTestJs = (name) => [
   `import { render } from "@testing-library/react";`,
   `import ${name} from "./${name}";`,
   "",
   `describe("${name} tests", () => {`,
   `  it("should render", () => {`,
-  `    expect(render(<${name} />)).toBeTruthy();`,
+  `    const { container } = render(<${name} />);`,
+  `    expect(container).toMatchSnapshot();`,
   `  });`,
   `});`,
 ];
 
-module.exports.createFuncTsx = name => [
-  `import React from "react";`,
-  `import styles from "./${name}.module.scss";`,
-  "",
-  `type ${name}Props = {`,
-  "",
+module.exports.createScss = (name) => [
+  `.${convertPascalToKebabCase(name)} {`,
   `}`,
-  "",
-  `const ${name}: React.FC<${name}Props>= () => {`,
-  `  return (`,
-  `    <>`,
-  `      <p>${name} works</p>`,
-  `    </>`,
-  `  );`,
-  `};`,
-  "",
-  `export default ${name};`,
-];
-
-module.exports.createTestTsx = name => [
-  `import React from "react";`,
-  `import { render } from "@testing-library/react";`,
-  `import ${name} from "./${name}";`,
-  "",
-  `describe("${name} tests", () => {`,
-  `  it("should render", () => {`,
-  `    expect(render(<${name} />)).toBeTruthy();`,
-  `  });`,
-  `});`,
 ];
